@@ -1,0 +1,70 @@
+version: '3.7'
+
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:1.21.0
+    hostname: "tracer"
+    command:
+      - "--log-level=info"
+      - "--admin.http.host-port=:14269"
+    environment:
+      COLLECTOR_ZIPKIN_HTTP_PORT: 9411
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      # Collector: admin port: health check at `/` and metrics at /metrics
+      - "14269:14269"
+      - "9411:9411"
+
+  traefik:
+    image: traefik:v2.3.4
+    hostname: whoami
+    ports:
+      - '80:80'
+      - '8080:8080'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./conf/:/etc/traefik/conf/
+      - ./certs:/etc/traefik/certs/
+    command:
+      - --api.dashboard
+      - --log.level=DEBUG
+
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.websecure.address=:443
+
+      - --providers.docker
+      - --providers.file.directory=/etc/traefik/conf
+      # tracing
+      - --tracing.serviceName=controller
+      - --tracing.spanNameLimit=250
+      - --tracing.jaeger.samplingType=const
+      - --tracing.jaeger.samplingParam=1.0
+      - --tracing.jaeger.samplingServerURL=http://tracer:5778/sampling
+      - --tracing.jaeger.localAgentHostPort=127.0.0.1:6831
+      - --tracing.jaeger.gen128Bit=true
+      - --tracing.jaeger.propagation=jaeger
+      - --tracing.jaeger.traceContextHeaderName=traefik-trace-id
+      - --tracing.jaeger.collector.endpoint=http://tracer:14268/api/traces?format=jaeger.thrift
+    labels:
+      traefik.enable: 'true'
+
+      # Dashboard
+      traefik.http.routers.traefik.rule: Host(`traefik.localhost`)
+      traefik.http.routers.traefik.tls: true
+      traefik.http.routers.traefik.entrypoints: websecure
+      traefik.http.routers.traefik.service: api@internal
+
+  whoami:
+    image: traefik/whoami:v1.6.0
+    labels:
+      traefik.enable: true
+      traefik.http.routers.whoami.entrypoints: websecure
+      traefik.http.routers.whoami.tls: true
+      traefik.http.routers.whoami.rule: Host(`whoami`)
