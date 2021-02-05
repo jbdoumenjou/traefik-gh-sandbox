@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy
+spec:
+  ports:
+#    - name: https
+#      port: 443
+    - name: http
+      port: 80
+  type: ExternalName
+  externalName: traefik.io
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: proxy-headers
+spec:
+  headers:
+    customRequestHeaders:
+      Host: traefik.io
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: proxy
+
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`whoami`)
+      kind: Rule
+      services:
+        - name: proxy
+#          port: 443
+          port: 80
+          passHostHeader: false
+      middlewares:
+        - name: proxy-headers
