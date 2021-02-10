@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:v2.4.2
+    ports:
+      - '80:80'
+      - '8080:8080'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - --api.insecure
+      - --log.level=DEBUG
+      - --metrics.prometheus=true
+      - --metrics.prometheus.buckets=0.1,0.3,1.2,5.0
+      - --entryPoints.web.forwardedHeaders.insecure
+      - --entrypoints.web.address=:80
+      - --providers.docker
+
+  whoami:
+    image: traefik/whoami:v1.6.0
+    labels:
+      traefik.enable: true
+      traefik.http.routers.whoami.entrypoints: web
+      traefik.http.routers.whoami.rule: Host(`whoami`)
+
+  prometheus:
+    image: prom/prometheus:v2.24.1
+    ports:
+      - 9000:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+#    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    labels:
+      traefik.http.routers.prometheus.rule: Host(`prometheus.localhost`)
+      traefik.http.routers.prometheus.service: prometheus
+      traefik.http.services.prometheus.loadbalancer.server.port: 9090
+#      - "traefik.docker.network=inbound"
+
+
+volumes:
+  prometheus-data:
