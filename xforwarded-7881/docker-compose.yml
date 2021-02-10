@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:v2.4.2
+    ports:
+      - '80:80'
+      - '8080:8080'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - --api.dashboard
+      - --log.level=DEBUG
+      - --entryPoints.web.forwardedHeaders.insecure
+      - --entrypoints.web.address=:80
+      - --providers.docker
+
+  whoami:
+    image: traefik/whoami:v1.6.0
+    labels:
+      traefik.enable: true
+      traefik.http.routers.whoami.entrypoints: web
+      traefik.http.routers.whoami.rule: Host(`whoami`)
