@@ -1,0 +1,13 @@
+
+[log]
+  level = "DEBUG"
+
+[api]
+  insecure = true
+
+[entryPoints.web]
+  address = ":8000"
+
+
+[providers.file]
+  directory = "./conf"

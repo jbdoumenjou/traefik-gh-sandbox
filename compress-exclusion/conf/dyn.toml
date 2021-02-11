@@ -1,0 +1,11 @@
+[http.routers.Router0]
+  entryPoints = ["web"]
+  middlewares = ["Middleware05"]
+  service = "Service01"
+  rule = "Host(`whoami`)"
+
+[[http.services.Service01.loadBalancer.servers]]
+  url = "http://127.0.0.1:9000"
+
+[http.middlewares.Middleware05.compress]
+  excludedContentTypes = ["text/yolo","text/event-stream"]
