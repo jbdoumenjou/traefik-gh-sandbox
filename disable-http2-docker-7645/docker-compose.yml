@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik/traefik:latest
+    ports:
+      - '80:80'
+      - '8080:8080'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./conf:/etc/traefik/conf
+    command:
+      - --api.insecure
+      - --log.level=DEBUG
+      - --entrypoints.websecure.address=:443
+      - --providers.docker
+      - --providers.file.directory=/etc/traefik/conf
+    labels:
+      traefik.enable: false
+
+  server:
+    image: nginx:1.19.8-alpine
+    ports:
+      - 8443:443
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d
+      - ./certs:/etc/nginx/certs
+      - ./data:/www/data
+    labels:
+      traefik.enable: true
+      traefik.http.routers.whoami.entrypoints: websecure
+      traefik.http.routers.whoami.rule: Host(`whoami`)
+      traefik.http.routers.whoami.tls: true
+      traefik.http.services.service01.loadbalancer.serverstransport: st0@file
+      traefik.http.services.service01.loadbalancer.server.port: 443
+      traefik.http.services.service01.loadbalancer.server.scheme: https
+

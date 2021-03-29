@@ -1,0 +1,4 @@
+[http.serversTransports.st0]
+    disableHTTP2 = false
+    insecureSkipVerify = true
+    serverName = "whoami"
