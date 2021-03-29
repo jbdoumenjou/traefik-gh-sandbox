@@ -35,4 +35,5 @@ services:
       traefik.http.services.service01.loadbalancer.serverstransport: st0@file
       traefik.http.services.service01.loadbalancer.server.port: 443
       traefik.http.services.service01.loadbalancer.server.scheme: https
+      traefik.http.serverstransports.mytransport.servername: toto
 
