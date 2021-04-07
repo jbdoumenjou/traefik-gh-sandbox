@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:1.7.29
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=8080'
+      - 'traefik.frontend.rule=Host:traefik.localhost'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - './traefik.toml:/traefik.toml'
+
+  whoami:
+    image: traefik/whoami:v1.6.0
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.frontend.rule=Host:whoami.localhost'

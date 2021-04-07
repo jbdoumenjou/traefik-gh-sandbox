@@ -1,0 +1,16 @@
+logLevel = "DEBUG"
+defaultEntryPoints = ["http"]
+
+[entryPoints.http]
+  address = ":80"
+
+# API definition
+[api]
+entryPoint = "traefik"
+dashboard = true
+
+[docker]
+watch = true
+exposedByDefault = false
+
+[metrics.prometheus]
