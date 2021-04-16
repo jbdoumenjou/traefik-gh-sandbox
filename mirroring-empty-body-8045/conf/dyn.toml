@@ -1,0 +1,18 @@
+[http.routers.Router0]
+    entryPoints = ["web"]
+    service = "s0"
+    rule = "Host(`whoami.localhost`)"
+
+[http.services.s0.mirroring]
+    service = "whoami"
+    maxBodySize = 1000000000
+
+[[http.services.s0.mirroring.mirrors]]
+    name = "whoamim"
+    percent = 42
+
+[[http.services.whoami.loadBalancer.servers]]
+    url = "http://whoami"
+
+[[http.services.whoamim.loadBalancer.servers]]
+    url = "http://whoamim"

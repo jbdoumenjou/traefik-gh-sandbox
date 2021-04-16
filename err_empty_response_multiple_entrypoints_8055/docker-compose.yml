@@ -1,0 +1,100 @@
+# NOTE: You will need to run:
+# docker network create proxy-test
+# Also add your target machine's IP to /etc/hosts -- e.g:
+# 127.0.0.1 deluge.myserver.local
+# 127.0.0.1 traefik.myserver.local
+# 127.0.0.1 whoami.myserver.local
+version: "3.3"
+services:
+  # enabling dockerproxy allows running traefik as non-priv user, if you so choose
+  #  dockerproxy:
+  #	security_opt:
+  #	  - "no-new-privileges:true"
+  #	container_name: "dockerproxy-test"
+  #	environment:
+  #	  CONTAINERS: 1
+  #	image: tecnativa/docker-socket-proxy
+  #	networks:
+  #	  - dockerproxy
+  #	expose:
+  #	  - 2375
+  #	volumes:
+  #	  - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  traefik:
+	volumes:
+	  - "/var/run/docker.sock:/var/run/docker.sock:ro"
+	#user: 10107:10107
+	networks:
+	  - proxy-test
+	  - dockerproxy
+	  - deluge-proxy
+    image: "traefik"
+    container_name: "traefik-test"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      #      - "--providers.docker.network=proxy-test"
+      - "--entrypoints.web.address=:3080"
+      - "--entrypoints.deluge-rc.address=:58846"
+    #      # attach to dockerproxy instead of docker socket itself
+    #      - "--providers.docker.endpoint=tcp://dockerproxy:2375"
+    ports:
+      - "80:3080"
+      - "58846:58846"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy-test"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=web"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.myserver.local`)"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+  whoami:
+    image: "containous/whoami"
+    container_name: "whoami-test"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.myserver.local`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.services.whoami.loadbalancer.server.port=80"
+  deluge:
+    networks:
+      - deluge-proxy
+    expose:
+      - "8112" # web interface
+      - "58846" # api
+    ports:
+      - "5555:5555" # listener for peer connections
+    image: linuxserver/deluge
+    container_name: "deluge-test"
+    environment:
+      - UMASK=007
+      - PUID=10109
+      - PGID=11109
+      - TZ=America/Los_Angeles
+      - DELUGE_LOGLEVEL=debug
+    #    volumes:
+    #      - /docker/test/traefik-stack/config:/config
+    #      - /docker/test/traefik-stack/torrents:/docker/test/traefik-stack/torrents
+    #      - /nas0/downloads:/downloads
+    restart: unless-stopped
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=deluge-proxy"
+      - "traefik.http.routers.deluge-router-http.rule=Host(`deluge.myserver.local`)"
+      - "traefik.tcp.routers.deluge-router.rule=HostSNI(`*`)"
+      - "traefik.http.routers.deluge-router-http.entrypoints=web"
+      - "traefik.tcp.routers.deluge-router-rc.entrypoints=deluge-rc"
+      - "traefik.http.services.deluge-service-http.loadbalancer.server.port=8112"
+      - "traefik.tcp.services.deluge-service-rc.loadbalancer.server.port=58846"
+      - "traefik.tcp.routers.deluge-router-rc.service=deluge-service-rc"
+
+networks:
+  proxy-test:
+    external: true
+  dockerproxy:
+    internal: true
+  deluge-proxy:
+    internal: true
