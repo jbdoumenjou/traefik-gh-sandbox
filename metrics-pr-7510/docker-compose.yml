@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  traefik:
+#     image: traefik:v2.4
+     image: traefik/traefik:latest
+     ports:
+       - '80:80'
+       - '8080:8080'
+     volumes:
+       - /var/run/docker.sock:/var/run/docker.sock
+       - ./conf:/etc/traefik/conf
+     command:
+       - --api.insecure
+       - --log.level=DEBUG
+       - --entrypoints.web.address=:80
+       - --providers.docker
+       - --metrics.prometheus.addentrypointslabels=true
+       - --metrics.prometheus.addrouterslabels=true
+       - --metrics.prometheus.addserviceslabels=true
+
+  whoami:
+     image: traefik/whoami:v1.6.0
+     labels:
+#       traefik.enable: false
+       traefik.http.routers.whoami.entrypoints: web
+       traefik.http.routers.whoami.rule: Host(`whoami.localhost`)
