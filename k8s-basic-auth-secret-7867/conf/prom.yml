@@ -1,0 +1,32 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: prom
+  namespace: default
+
+spec:
+  replicas: 1
+  selector:
+	matchLabels:
+	  app: prom
+  template:
+	metadata:
+	  labels:
+		app: prom
+	spec:
+	  containers:
+		- name: prom
+		  image: quay.io/prometheus/prometheus:latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+
+spec:
+  ports:
+	- port: 80
+  selector:
+	app: whoami
