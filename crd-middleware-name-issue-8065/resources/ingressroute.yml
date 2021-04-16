@@ -1,0 +1,28 @@
+---
+# Declaring the user list
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: test---auth
+spec:
+  addPrefix:
+    prefix: "/toto"
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: proxy
+
+spec:
+  entryPoints:
+     - web
+  routes:
+     - match: Host(`whoami`)
+       kind: Rule
+       services:
+          - name: whoami
+#            port: 443
+            port: 80
+       middlewares:
+          - name: test---auth
