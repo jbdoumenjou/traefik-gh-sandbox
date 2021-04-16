@@ -1,0 +1,28 @@
+[http.middlewares]
+  [http.middlewares.http2https.redirectScheme]
+    scheme = "https"
+    permanent = true
+
+  [http.middlewares.hsts-header.headers]
+    [http.middlewares.hsts-header.headers.customResponseHeaders]
+      Strict-Transport-Security = "max-age=63072000"
+
+[tls.stores]
+  [tls.stores.default]
+    [tls.stores.default.defaultCertificate]
+      certFile = "/etc/traefik/ssl/cert.crt"
+      keyFile  = "/etc/traefik/ssl/key.key"
+
+[tls.options]
+  [tls.options.default]
+    preferServerCipherSuites = true
+    minVersion = "VersionTLS12"
+    cipherSuites = [
+      "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+      "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+      "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+      "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+      "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305",
+      "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
+    ]
+

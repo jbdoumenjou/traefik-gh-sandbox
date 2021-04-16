@@ -1,0 +1,27 @@
+# http routing section
+[http]
+  [http.routers]
+     # Define a connection between requests and services
+     [http.routers.whoami]
+ 
+      rule = "HostRegexp(`{host:^whoami\\.example\\.com}`) && Method(`GET`, `POST`, `HEAD`, `OPTIONS`, `PUT`)"
+
+
+
+      # If the rule matches, applies the middleware
+
+      middlewares = ["http2https"]
+
+      # If the rule matches, forward to the whoami service (declared below)
+      service = "whoami"
+
+
+  [http.services]
+    # Define how to reach an existing service on our infrastructure
+
+    [http.services.whoami.loadBalancer]
+      [[http.services.whoami.loadBalancer.servers]]
+        url = "http://whoami:8000"
+
+
+
