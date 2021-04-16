@@ -20,3 +20,17 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.frontend.rule=Host:whoami.localhost'
+
+#  influxdb:
+#     image: influxdb:1.8-alpine
+#     restart: unless-stopped
+##     volumes:
+##       - "{{ traefik_influx_db_dir }}:/var/lib/influxdb"
+#    ports:
+#      - "38089:8089/udp"
+#      - "38086:8086"
+#    environment:
+#      - INFLUXDB_DB=traefik
+#      - INFLUXDB_HTTP_AUTH_ENABLED=
+#      - INFLUXDB_UDP_ENABLED=true
+#      - INFLUXDB_UDP_DATABASE=traefik
