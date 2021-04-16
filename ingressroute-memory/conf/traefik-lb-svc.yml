@@ -9,31 +9,31 @@ apiVersion: apps/v1
 metadata:
   name: traefik
   labels:
-    app: traefik-lb
+	app: traefik-lb
 
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      app: traefik-lb
+	matchLabels:
+	  app: traefik-lb
   template:
-    metadata:
-      labels:
-        app: traefik-lb
-    spec:
-      serviceAccountName: traefik-ingress-controller
-      containers:
-        - name: traefik
-          image: traefik:v2.4.8
-          args:
-            - --log.level=DEBUG
-            - --api.insecure
-            - --entrypoints.web.address=:80
-            - --entrypoints.web.http.redirections.entryPoint.to=websecure
-            - --entrypoints.websecure.address=:443
-            - --entrypoints.websecure.http.tls
-            - --providers.kubernetescrd
-          ports:
+	metadata:
+	  labels:
+		app: traefik-lb
+	spec:
+	  serviceAccountName: traefik-ingress-controller
+	  containers:
+		- name: traefik
+		  image: traefik:v2.4.8
+		  args:
+			- --log.level=DEBUG
+			- --api.insecure
+			- --entrypoints.web.address=:80
+			- --entrypoints.web.http.redirections.entryPoint.to=websecure
+			- --entrypoints.websecure.address=:443
+			- --entrypoints.websecure.http.tls
+			- --providers.kubernetescrd
+	      ports:
             - name: web
               containerPort: 80
             - name: websecure

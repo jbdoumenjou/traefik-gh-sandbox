@@ -6,10 +6,10 @@ metadata:
 
 spec:
   entryPoints:
-    - web
+	- web
   routes:
-    - match: Host(`whoami.localhost`) && PathPrefix(`/whoami%NUMBER%`)
-      kind: Rule
-      services:
-        - name: whoami
-          port: 80
+	- match: Host(`whoami.localhost`) && PathPrefix(`/whoami%NUMBER%`)
+	  kind: Rule
+	  services:
+		- name: whoami
+		  port: 80

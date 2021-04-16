@@ -7,9 +7,9 @@ spec:
   group: traefik.containo.us
   version: v1alpha1
   names:
-    kind: IngressRoute
-    plural: ingressroutes
-    singular: ingressroute
+	kind: IngressRoute
+	plural: ingressroutes
+	singular: ingressroute
   scope: Namespaced
 
 ---
@@ -22,9 +22,9 @@ spec:
   group: traefik.containo.us
   version: v1alpha1
   names:
-    kind: Middleware
-    plural: middlewares
-    singular: middleware
+	kind: Middleware
+	plural: middlewares
+	singular: middleware
   scope: Namespaced
 
 ---
@@ -37,9 +37,9 @@ spec:
   group: traefik.containo.us
   version: v1alpha1
   names:
-    kind: IngressRouteTCP
-    plural: ingressroutetcps
-    singular: ingressroutetcp
+	kind: IngressRouteTCP
+	plural: ingressroutetcps
+	singular: ingressroutetcp
   scope: Namespaced
 
 ---
@@ -52,9 +52,9 @@ spec:
   group: traefik.containo.us
   version: v1alpha1
   names:
-    kind: IngressRouteUDP
-    plural: ingressrouteudps
-    singular: ingressrouteudp
+	kind: IngressRouteUDP
+	plural: ingressrouteudps
+	singular: ingressrouteudp
   scope: Namespaced
 
 ---
@@ -67,9 +67,9 @@ spec:
   group: traefik.containo.us
   version: v1alpha1
   names:
-    kind: TLSOption
-    plural: tlsoptions
-    singular: tlsoption
+	kind: TLSOption
+	plural: tlsoptions
+	singular: tlsoption
   scope: Namespaced
 
 ---
@@ -82,9 +82,9 @@ spec:
   group: traefik.containo.us
   version: v1alpha1
   names:
-    kind: TLSStore
-    plural: tlsstores
-    singular: tlsstore
+	kind: TLSStore
+	plural: tlsstores
+	singular: tlsstore
   scope: Namespaced
 
 ---
@@ -97,9 +97,9 @@ spec:
   group: traefik.containo.us
   version: v1alpha1
   names:
-    kind: TraefikService
-    plural: traefikservices
-    singular: traefikservice
+	kind: TraefikService
+	plural: traefikservices
+	singular: traefikservice
   scope: Namespaced
 
 ---
@@ -112,7 +112,7 @@ spec:
   group: traefik.containo.us
   version: v1alpha1
   names:
-    kind: ServersTransport
-    plural: serverstransports
-    singular: serverstransport
+	kind: ServersTransport
+	plural: serverstransports
+	singular: serverstransport
   scope: Namespaced
