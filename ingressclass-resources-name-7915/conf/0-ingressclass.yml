@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: traefik-lb-nawak
+spec:
+  controller: traefik.io/ingress-controller
+#  controller: another2/ingress-controller
+
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: traefik-lb-pouel
+spec:
+  controller: traefik.io.nawak/ingress-controller
+---
+#apiVersion: networking.k8s.io/v1
+#kind: IngressClass
+#metadata:
+#  name: traefik-lb-pouel
+#spec:
+#  controller: traefik.io/ingress-controller
