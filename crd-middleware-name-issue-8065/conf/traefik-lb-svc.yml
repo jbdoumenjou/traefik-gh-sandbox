@@ -25,9 +25,9 @@ spec:
       containers:
         - name: traefik
 #          image: traefik:v2.4
-#          image: traefik:v2.3
+          image: traefik:v2.3.3
+          #          image: traefik/traefik:latest
           imagePullPolicy: IfNotPresent
-          image: traefik/traefik:latest
           args:
             - --log.level=DEBUG
             - --api.insecure
