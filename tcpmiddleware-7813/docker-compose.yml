@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  traefik:
+#    image: traefik:v2.4.7
+    image: traefik/traefik:latest
+    ports:
+      - '80:80'
+      - '8080:8080'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./conf:/etc/traefik/conf
+    command:
+      - --api.insecure
+      - --log.level=DEBUG
+      - --entrypoints.web.address=:80
+      - --providers.docker
+      - --providers.file.directory=/etc/traefik/conf
+
+  whoamitcp:
+    image: traefik/whoamitcp
+    labels:
+      traefik.enable: true
+      traefik.tcp.routers.whoami.middlewares: my-ipwhitelist@file
+      traefik.tcp.routers.whoami.entrypoints: web
+      traefik.tcp.routers.whoami.rule: HostSNI(`*`)

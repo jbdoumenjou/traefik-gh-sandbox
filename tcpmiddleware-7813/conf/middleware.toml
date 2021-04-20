@@ -1,0 +1,3 @@
+[tcp.middlewares.my-ipwhitelist.ipWhiteList]
+    # play with me :)
+    sourceRange = ["127.0.0.1/32", "172.0.0.0/8"]
