@@ -1,0 +1,11 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: bad-redirectregex
+  annotations:
+    kubernetes.io/ingress.class: traefik-ext
+spec:
+  redirectRegex:
+    permanent: "true"
+    regex: ^http://localhost/(.*)
+    replacement: http://mydomain/${1}
