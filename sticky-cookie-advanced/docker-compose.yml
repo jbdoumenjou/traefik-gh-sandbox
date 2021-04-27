@@ -1,0 +1,53 @@
+version: '3.6'
+services:
+#  traefik:
+#    # image: traefik/traefik:latest
+#    image: traefik:2.4
+#    command:
+#      - '--api.insecure=true'
+#      - '--providers.docker'
+#      - '--log.level=DEBUG'
+#    ports:
+#      - "80:80"
+#      - "8080:8080"
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+
+  whoami:
+    image: traefik/whoami
+    scale: 5
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      # - "traefik.http.services.whoami.loadbalancer.sticky.cookie=true"
+
+  whoami-sticky:
+    image: traefik/whoami
+    scale: 5
+    labels:
+      - "traefik.http.routers.whoami-sticky.rule=Host(`sticky.whoami.localhost`)"
+      - "traefik.http.services.whoami-sticky.loadbalancer.sticky.cookie=true"
+
+  whoami-salt:
+    image: traefik/whoami
+    scale: 5
+    labels:
+      - "traefik.http.routers.whoami-salt.rule=Host(`salt.whoami.localhost`)"
+      - "traefik.http.services.whoami-salt.loadbalancer.sticky.cookie=true"
+      - "traefik.http.services.whoami-salt.loadbalancer.sticky.manager.fastHash.salt=awesome-salt"
+
+  whoami-aes:
+    image: traefik/whoami
+    scale: 5
+    labels:
+      - "traefik.http.routers.whoami-aes.rule=Host(`aes.whoami.localhost`)"
+      - "traefik.http.services.whoami-aes.loadbalancer.sticky.cookie=true"
+      - "traefik.http.services.whoami-aes.loadbalancer.sticky.manager.aes.key=1234123412341234"
+
+  whoami-migrate:
+    image: traefik/whoami
+    scale: 5
+    labels:
+      - "traefik.http.routers.whoami-gratte.rule=Host(`migrate.whoami.localhost`)"
+      - "traefik.http.services.whoami-gratte.loadbalancer.sticky.cookie=true"
+      - "traefik.http.services.whoami-gratte.loadbalancer.sticky.manager.aes.key=1234123412341234"
+      - "traefik.http.services.whoami-gratte.loadbalancer.sticky.fromManager.default"
