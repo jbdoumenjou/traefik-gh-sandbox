@@ -1,0 +1,11 @@
+[http.routers]
+    [http.routers.test]
+        rule = "Host(`test.example.org`)"
+        service = "test-service"
+
+  [http.services]
+
+    [http.services.test-service]
+      [http.services.seahub.loadBalancer]
+        [[http.services.seahub.loadBalancer.servers]]
+          url = "http://host.docker.internal:8000"

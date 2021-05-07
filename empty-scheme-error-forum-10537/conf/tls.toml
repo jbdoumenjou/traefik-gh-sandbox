@@ -1,0 +1,3 @@
+[[tls.certificates]]
+    certFile = "/etc/traefik/certs/whoami.localhost.pem"
+    keyFile = "/etc/traefik/certs/whoami.localhost-key.pem"

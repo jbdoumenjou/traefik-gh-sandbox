@@ -1,0 +1,26 @@
+[accessLog]
+
+#[certificatesResolvers.defaultacme.acme]
+#email = "user@example.org"
+#storage = "/acme.json"
+
+#[certificatesResolvers.defaultacme.acme.tlsChallenge]
+
+
+[entryPoints]
+
+[entryPoints.http]
+address = ":80"
+[entryPoints.http.http.redirections.entryPoint]
+scheme = "https"
+to = "https"
+
+[entryPoints.https]
+address = ":443"
+[entryPoints.https.http.tls]
+
+#certResolver = "defaultacme"
+
+[providers.docker]
+endpoint = "unix:///var/run/docker.sock"
+exposedByDefault = false

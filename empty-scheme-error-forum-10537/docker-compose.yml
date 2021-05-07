@@ -1,0 +1,23 @@
+services:
+  webproxy:
+    image: traefik:v2.4
+    restart: unless-stopped
+    userns_mode: host
+    networks:
+      - webgateway
+    ports:
+      - ":80"
+      - ":443"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+#      - ${ACME_STORAGE}:/acme.json
+      - ./traefik.toml:/traefik.toml:ro
+      - ./conf:/etc/traefik/conf:ro
+      - ./certs:/etc/traefik/certs/:ro
+
+networks:
+  webgateway:
+    external:
+      name: webgateway
