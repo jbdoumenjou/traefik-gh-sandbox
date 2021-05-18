@@ -9,12 +9,14 @@ services:
        - '443:443'
      volumes:
        - /var/run/docker.sock:/var/run/docker.sock
+       - ./conf:/etc/traefik/conf
      command:
        - --api.dashboard
        - --log.level=DEBUG
        - --entryPoints.web.forwardedHeaders.insecure
        - --entrypoints.web.address=:80
        - --providers.docker
+       - --providers.file.directory=/etc/traefik/conf
 
   whoami:
      image: traefik/whoami:v1.6.0
@@ -23,7 +25,8 @@ services:
        traefik.http.routers.whoami.entrypoints: web
        traefik.http.routers.whoami.rule: Host(`whoami`)
        traefik.http.routers.whoami.middlewares: testheader
-       traefik.http.middlewares.testheader.headers.customrequestheaders.X-Script-Name: homeopathie
+       # remove header
+       traefik.http.middlewares.testheader.headers.customrequestheaders.X-Script-Name:
 
   whoami2:
      image: traefik/whoami:v1.6.0
@@ -31,5 +34,5 @@ services:
        - "traefik.enable=true"
        - "traefik.http.routers.whoami2.entrypoints=web"
        - "traefik.http.routers.whoami2.rule=Host(`whoami.localhost`)"
-       - "traefik.http.routers.whoami2.middlewares=testheader2"
-       - "traefik.http.middlewares.testheader2.headers.customrequestheaders.X-Script-Name=boom"
+       - "traefik.http.routers.whoami2.middlewares=testheader2,testHeader@file"
+       - "traefik.http.middlewares.testheader2.headers.customrequestheaders.X-Script-Name="
