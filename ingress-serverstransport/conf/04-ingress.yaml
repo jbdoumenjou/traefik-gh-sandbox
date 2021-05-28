@@ -1,0 +1,129 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: default
+  name: whoami-cert
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNRekNDQWF3Q0NRQzB1NVB6NGY3bFFEQU5CZ2txaGtpRzl3MEJBUVVGQURCbU1Rc3dDUVlEVlFRR0V3SkcKVWpFUE1BMEdBMVVFQ0F3R1JuSmhibU5sTVE0d0RBWURWUVFIREFWRWFXcHZiakVUTUJFR0ExVUVDZ3dLUTI5dQpkR0ZwYm05MWN6RVFNQTRHQTFVRUN3d0hWSEpoWldacGF6RVBNQTBHQTFVRUF3d0dkMmh2WVcxcE1CNFhEVEl3Ck1EWXhPVEV6TWpreU1Wb1hEVEl4TURZeE9URXpNamt5TVZvd1pqRUxNQWtHQTFVRUJoTUNSbEl4RHpBTkJnTlYKQkFnTUJrWnlZVzVqWlRFT01Bd0dBMVVFQnd3RlJHbHFiMjR4RXpBUkJnTlZCQW9NQ2tOdmJuUmhhVzV2ZFhNeApFREFPQmdOVkJBc01CMVJ5WVdWbWFXc3hEekFOQmdOVkJBTU1CbmRvYjJGdGFUQ0JuekFOQmdrcWhraUc5dzBCCkFRRUZBQU9CalFBd2dZa0NnWUVBeThSMkFxK1FING41akZUZW4rQ2tNWFdpMU1UUkVadjhkelBCNjlCeG5LeE8KdkQxUS9sSk5PcEJXZ1BSeGt2SHoycmhzOWtlWGJNQXoyNG1zVGc3cjFaZnNmcTRqV2podmtlanVvUFJPNDNrVgo3eDFmOGpzS1Uwd1BwMmVpMUxic1NmTVk4OVNmbUJEcWZwNm9IWng2NDVOaVBJdWhTU2d4cWx1U0NSTlBkWnNDCkF3RUFBVEFOQmdrcWhraUc5dzBCQVFVRkFBT0JnUUF1TDViZnlCY25NZUxrRWk3TVUyalB5UlY0WlpZYm5kb0cKM0VmNFlScHRla21vbDBMU3prblpwbkgveGp4b3RFM0NGZTRXODgrQXg3MlpRMEg5SXI0R2NDQUQvK2pPWDIyOQptS0RBN25mOWlJVlFpcVZ5N1k2V1R6OHJzRnE5N1lqZGViREs5TWFSMmhXLzd4SzN1aDg3WEJMTm10QzJCWmNHCnlJM0doNXkzc2c9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDV3dJQkFBS0JnUURMeEhZQ3I1QWZpZm1NVk42ZjRLUXhkYUxVeE5FUm0veDNNOEhyMEhHY3JFNjhQVkQrClVrMDZrRmFBOUhHUzhmUGF1R3oyUjVkc3dEUGJpYXhPRHV2VmwreCtyaU5hT0crUjZPNmc5RTdqZVJYdkhWL3kKT3dwVFRBK25aNkxVdHV4Sjh4anoxSitZRU9wK25xZ2RuSHJqazJJOGk2RkpLREdxVzVJSkUwOTFtd0lEQVFBQgpBb0dBR05sRWF0OXQrK3FmZS9WOWtKR2NkRXVjSjhZNG1LVWxESVJMU2E2SnJFbDI4STJwcXRudWdRM0kvc0RRCmVOTDRvZHVMcmh6YzRtNHQ1TC9OTzFlbWVwWENRT09uYXRpYU1TcWR3eXdPaW13V0EwUnhsd0w0UFRBZ1ZyOHMKVlJHUGMrejlkZVRMTU5EenNLdnJyNjR3QjJiR3VTN1R5VUQ1UjRrTVVoMDRLMEVDUVFEM1ozWjRwYS9Ba0hMKwo5Q1FBNEt3UTd6eVIwNkpWZWZUKzI1WUd3aVBuV2QwbEhXa2FwaXpXUW5nZVd5OE9yWHU3N0VnM25EMzZMeVoyClVXNjFwNmoxQWtFQTB0amZCTXJZMlptZVlDV2NKK2gvMTkxdHlpemZ4RVpPSlU1L2xaRmZJZkVRYVBra3FnMDYKSnNlL3lYTkJROER0SWhkbHJBTS9UYlJYTzN5NHo1M0tUd0pBQTVNd0tCQWsyUUI5V09mSU9XY0Z0WHp2Z0IveAp3WkJ3bE5veGNjbU9ZVUp3S3FBaEs2eHBDM09NYnN2Y2d6YklpZStoSDRTWGRLMEh2ai93L0pqK25RSkFacDBEClZOcS8xSTd0eEE4cHcwWmt5WkxMTnVURjlramRDVXo5ekxYV0hiZXJhOXNzMjlIYUpqdDZmRGtxWHlZS2dsZnUKdEZ0VU9LWDIrazJGeUEwY0F3SkFkRXRob3phZk8wU3hPMWJnMDNhQ2tLRTdBMzd2dnZ1T0x6N2pWR3BVTHNpZgp2LzladFUwVi9ZeVhWdHpHU09OaXNVdlIzT0NoMDFpaEExV05sOUM3N2c9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+
+#---
+#kind: Ingress
+#apiVersion: extensions/v1beta1
+#metadata:
+#  name: extensions
+#
+#spec:
+#  rules:
+#    - host: whoami
+#      http:
+#        paths:
+#          - path: /ext/bar
+#            backend:
+#              serviceName: whoami
+#              servicePort: 80
+#          - path: /ext/foo
+#            backend:
+#              serviceName: whoami
+#              servicePort: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: traefik-ingress
+spec:
+  controller: traefik.io/ingress-controller
+
+#---
+#kind: Ingress
+#apiVersion: networking.k8s.io/v1beta1
+#metadata:
+#  name: networking
+#  annotations:
+#    traefik.ingress.kubernetes.io/router.tls: "true"
+#
+#spec:
+#  ingressClassName: traefik-ingress
+#  rules:
+#    - host: whoami
+#      http:
+#        paths:
+#          - path: /net/bar
+#            backend:
+#              serviceName: whoami
+#              servicePort: 80
+#          - path: /net/foo
+#            backend:
+#              serviceName: whoami
+#              servicePort: 80
+#  tls:
+#    - secretName: whoami-cert
+
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: networking
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+#    traefik.ingress.kubernetes.io/router.tls: "true"
+
+
+spec:
+  ingressClassName: traefik-ingress
+  rules:
+    - host: whoami
+      http:
+        paths:
+          - path: /net/bar
+            pathType: Exact
+            backend:
+              service:
+                name: whoami
+                port:
+                  number: 80
+#          - path: /net/foo
+#            pathType: Exact
+#            backend:
+#              service:
+#                name: whoami
+#                port:
+#                  number: 80
+#  tls:
+#    - secretName: whoami-cert
+
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: networkingtls
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/service.serverstransport: mst@file
+
+
+spec:
+  ingressClassName: traefik-ingress
+  rules:
+    - host: whoami
+      http:
+        paths:
+#          - path: /net/bar
+#            pathType: Exact
+#            backend:
+#              service:
+#                name: whoami
+#                port:
+#                  number: 80
+          - path: /net/foo
+            pathType: Exact
+            backend:
+              service:
+                name: whoami
+                port:
+                  number: 80
+  tls:
+    - secretName: whoami-cert
+
