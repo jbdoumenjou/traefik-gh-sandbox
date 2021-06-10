@@ -1,0 +1,9 @@
+[http.routers.Router0]
+  entryPoints = ["websecure"]
+  service = "inception"
+  rule = "Host(`whoami.localhost`)"
+  [http.routers.Router0.tls]
+
+[[http.services.inception.loadBalancer.servers]]
+    url = "http://127.0.0.1:9000"
+
