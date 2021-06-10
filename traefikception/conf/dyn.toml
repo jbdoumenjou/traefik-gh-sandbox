@@ -1,9 +1,23 @@
+# Dynamic configuration
 [http.routers.Router0]
   entryPoints = ["websecure"]
   service = "inception"
-  rule = "Host(`whoami.localhost`)"
+  rule = "Host(`whoami`)"
+  middlewares = ["m1"]
   [http.routers.Router0.tls]
 
 [[http.services.inception.loadBalancer.servers]]
     url = "http://127.0.0.1:9000"
+
+[http.middlewares.m1.passTLSClientCert.info]
+  notafter = true
+
+# TLS
+[tls.options.default.clientAuth]
+  caFiles = ["/etc/traefik/certs/whoami-client.pem", "/etc/traefik/certs/whoami2-client.pem"]
+  clientAuthType = "RequireAndVerifyClientCert"
+
+[[tls.certificates]]
+  certFile = "/etc/traefik/certs/whoami.pem"
+  keyFile = "/etc/traefik/certs/whoami-key.pem"
 
