@@ -1,0 +1,3 @@
+[[tls.certificates]]
+	certFile = "/home/jbd/go/src/github.com/jbdoumenjou/traefik-gh-sandbox/certificate-reload/conf/whoami.localhost.pem"
+	keyFile = "/home/jbd/go/src/github.com/jbdoumenjou/traefik-gh-sandbox/certificate-reload/conf/whoami.localhost-key.pem"
