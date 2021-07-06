@@ -13,14 +13,12 @@ start:
 	k3d cluster create mycluster \
 		--api-port 6550 \
 		-p 80:80@loadbalancer \
-		-p 8080:8080@loadbalancer \
 		-p 443:443@loadbalancer \
-		--k3s-server-arg '--no-deploy=traefik' \
-		-i rancher/k3s:v1.18.6-k3s1
+		--k3s-server-arg '--no-deploy=traefik'
 	k3d image import traefik/traefik:latest -c mycluster
 	#kubectl create secret tls mysecret --cert certs/whoami.pem --key certs/whoami-key.pem
 	kubectl apply -f gateway-resources
-	kubectl apply -f services
+	kubectl apply -f services/whoami-svc.yml
 
 apply-all: apply-http apply-tcp apply-tls
 
