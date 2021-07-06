@@ -1,12 +1,4 @@
 ---
-kind: GatewayClass
-apiVersion: networking.x-k8s.io/v1alpha1
-metadata:
-  name: my-gateway-class
-spec:
-  controller: traefik.io/gateway-controller
-
----
 kind: Gateway
 apiVersion: networking.x-k8s.io/v1alpha1
 metadata:
@@ -15,16 +7,18 @@ metadata:
 spec:
   gatewayClassName: my-gateway-class
   listeners:
-    - protocol: HTTP
-      port: 8000
+    - protocol: HTTPS
+      tls:
+        certificateRef:
+          group: "core"
+          kind: "Secret"
+          name: "mysecret"
+      port: 8443
       routes:
         kind: HTTPRoute
-        namespaces:
-          from: Same
         selector:
           matchLabels:
-            app: traefik
-
+            app: foo
 ---
 kind: HTTPRoute
 apiVersion: networking.x-k8s.io/v1alpha1
@@ -32,15 +26,15 @@ metadata:
   name: http-app-1
   namespace: default
   labels:
-    app: traefik
+    app: foo
 spec:
   hostnames:
-    - "whoami"
+    - "whoami.localhost"
   rules:
     - matches:
         - path:
             type: Exact
-            value: /bar
+            value: /foo
       forwardTo:
         - serviceName: whoami
           port: 80

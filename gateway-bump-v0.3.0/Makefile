@@ -1,7 +1,5 @@
 all: start
 
-GOROOT=/home/tm/.local/opt/go-1.16
-
 mkcert:
 	go run ${GOROOT}/src/crypto/tls/generate_cert.go  --rsa-bits 4096 --host whoami.localhost --ca --start-date "Jan 1 00:00:00 1970" --duration=1000000h
 	mv cert.pem certs/whoami.pem
@@ -16,7 +14,7 @@ start:
 		-p 443:443@loadbalancer \
 		--k3s-server-arg '--no-deploy=traefik'
 	k3d image import traefik/traefik:latest -c mycluster
-	#kubectl create secret tls mysecret --cert certs/whoami.pem --key certs/whoami-key.pem
+	kubectl create secret tls mysecret --cert certs/whoami.pem --key certs/whoami-key.pem
 	kubectl apply -f gateway-resources
 	kubectl apply -f services/whoami-svc.yml
 
