@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  traefik:
+#    image: traefik:v2.3.4
+    image: traefik/traefik:latest
+    hostname: whoami
+    ports:
+      - '80:80'
+      - '8080:8080'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./conf/:/etc/traefik/conf/
+      - ./certs:/etc/traefik/certs/
+    command:
+      - --api.insecure=true
+      - --log.level=DEBUG
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.websecure.address=:443
+      - --providers.docker
+      - --providers.file.directory=/etc/traefik/conf
+
+  whoami:
+    image: traefik/whoami:v1.6.0
+    labels:
+      traefik.http.routers.whoami.entrypoints: websecure
+      traefik.http.routers.whoami.tls: true
+      traefik.http.routers.whoami.rule: Host(`whoami.localhost`)
+      traefik.http.routers.whoami.middlewares: test-passtlsclientcert@file

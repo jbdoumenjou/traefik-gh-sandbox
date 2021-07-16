@@ -1,0 +1,6 @@
+[tls.options.default.clientAuth]
+  caFiles = ["/etc/traefik/certs/signing-ca.crt"]
+  clientAuthType = "RequireAndVerifyClientCert"
+
+[http.middlewares.test-passtlsclientcert.passTLSClientCert.info.subject]
+	organizationalUnit = true
