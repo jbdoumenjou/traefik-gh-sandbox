@@ -1,0 +1,32 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: proxy
+
+spec:
+  entryPoints:
+     - web
+  routes:
+     - match: Host(`whoami`)
+       middlewares:
+         - name: n2-add-foo@kubernetescrd
+         # blocked
+#         - name: add-foo@kubernetescrd
+#           namespace: n2
+       kind: Rule
+       services:
+          - name: whoami
+#            port: 443
+            port: 80
+
+---
+# Prefixing with /foo
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: add-foo
+  namespace: n2
+spec:
+  addPrefix:
+    prefix: /foo
