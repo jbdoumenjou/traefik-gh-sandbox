@@ -1,0 +1,2 @@
+[http.middlewares.testHeader.headers.customRequestHeaders]
+	X-Script-Name = "test"
