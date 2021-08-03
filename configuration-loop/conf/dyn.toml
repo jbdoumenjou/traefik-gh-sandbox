@@ -1,0 +1,28 @@
+# Add the service
+[http.routers.router1]
+  entryPoints = ["web"]
+  service = "whoami"
+  rule = "Host(`whoami.localhost`)"
+
+[http.services.whoami]
+  [http.services.whoami.weighted.sticky.cookie]
+  name = "cookie"
+
+  [[http.services.whoami.weighted.services]]
+    name = "whoami"
+    weight = 1
+
+  [[http.services.whoami.weighted.services]]
+    name = "whoami2"
+    weight = 1
+
+  [http.services.whoami1.loadBalancer.healthCheck]
+    path = "/health"
+    [[http.services.whoami1.loadBalancer.servers]]
+      url = "http://127.0.0.1:8080"
+
+[http.services.whoami2.loadBalancer]
+  [http.services.whoami2.loadBalancer.healthCheck]
+  path = "/health"
+  [[http.services.whoami2.loadBalancer.servers]]
+    url = "http://127.0.0.1:8080"

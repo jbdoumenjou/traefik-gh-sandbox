@@ -1,0 +1,11 @@
+[providers.file]
+	directory = "/home/jbd/go/src/github.com/jbdoumenjou/traefik-gh-sandbox/configuration-loop"
+
+[entryPoints.web]
+	address = ":8000"
+
+[api]
+	insecure = true
+
+[log]
+	level = "DEBUG"
