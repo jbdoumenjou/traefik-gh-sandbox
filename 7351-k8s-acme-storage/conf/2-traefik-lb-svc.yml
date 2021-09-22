@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: traefik-ingress-controller
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: traefik
+  labels:
+    app: traefik-lb
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-lb
+  template:
+    metadata:
+       labels:
+          app: traefik-lb
+    spec:
+      serviceAccountName: traefik-ingress-controller
+      containers:
+        - name: traefik
+          tty: true
+          image: traefik:v2.5
+          #          image: traefik/traefik:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            # get the pebble cert
+            - name: LEGO_CA_CERTIFICATES
+              value: "/pebble/pebble.minica.pem"
+            - name: LEGO_CA_SERVER_NAME
+              value: pebble
+          args:
+            - --log.level=DEBUG
+            - --api.insecure
+            - --entrypoints.web.address=:80
+            - --entrypoints.websecure.address=:443
+            - --providers.kubernetescrd
+
+            - --entrypoints.websecure.http.tls.certresolver=leresolver
+            - --certificatesresolvers.leresolver.acme.caserver=https://pebble:14000/dir
+            - --certificatesresolvers.leresolver.acme.email=your@email.com
+            - --certificatesresolvers.leresolver.acme.storage=/letsencrypt/acme.json
+            - --certificatesresolvers.leresolver.acme.httpChallenge.entrypoint=web
+
+          ports:
+            - name: web
+              containerPort: 80
+            - name: websecure
+              containerPort: 443
+            - name: api
+              containerPort: 8080
+
+          volumeMounts:
+            # Here we mount the configuration of the agent.
+            - name: pebble-volume
+              mountPath: /pebble/
+            - name: acme-storage
+              mountPath: /letsencrypt/
+
+      volumes:
+        - name: pebble-volume
+          persistentVolumeClaim:
+            claimName: pebble-pvc
+        - name: acme-storage
+          persistentVolumeClaim:
+            claimName: acme-storage-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik
+spec:
+  selector:
+    app: traefik-lb
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: api
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: web
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+      name: websecure
+    - protocol: TCP
+      port: 14000
+      targetPort: 14000
+      name: pebble
+  type: LoadBalancer
