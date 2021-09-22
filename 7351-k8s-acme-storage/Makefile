@@ -10,8 +10,12 @@ start: stop
 	k3d image import traefik/traefik:latest -c mycluster
 	# to ensure the definitions are loaded first
 	# then load all other configurations
-	#kubectl apply -f conf/crds
-	#kubectl apply -f conf/
+	kubectl apply -f conf/0*
+	kubectl apply -f conf/1*
+	sleep 3s
+	kubectl apply -f conf/2*
+	sleep 3s
+	kubectl apply -f conf/3*
 
 apply-routes:
 	echo "Apply resources"
