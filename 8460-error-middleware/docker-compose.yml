@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik/traefik:latest
+#    image: traefik:v2.4
+    tty: true
+    ports:
+      - '80:80'
+      - '8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - --api.insecure
+      - --log.level=DEBUG
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.middlewares=test-errorpage@docker
+      - --providers.docker
+    labels:
+      traefik.http.middlewares.test-errorpage.errors.status: 400-599
+      traefik.http.middlewares.test-errorpage.errors.service: webserver
+      traefik.http.middlewares.test-errorpage.errors.query: /{status}.html
+
+  whoami:
+    image: traefik/whoami:v1.6.0
+    labels:
+      traefik.http.routers.whoami.entrypoints: web
+      traefik.http.routers.whoami.rule: Host(`whoami.localhost`)
+
+  webserver:
+    image: traefik/whoami:v1.6.0
+    labels:
+      traefik.http.services.webserver.loadbalancer.server.port: 80
+      # change value to check the host used by error page middleware
+      traefik.http.services.webserver.loadbalancer.passhostheader: false
